@@ -1,0 +1,13 @@
+<template>
+    <div class="slds-align_absolute-center" style="width: 50%;">
+        <lightning-card title="Event">
+            <div class="slds-p-around_large">
+                <template for:each={fieldsData} for:item="field">
+                    <div key={field.apiName} class="slds-p-around_small">
+                        <lightning-input type={field.type} label={field.label}></lightning-input>
+                    </div>
+                </template>
+            </div>
+        </lightning-card>
+    </div>
+</template>
