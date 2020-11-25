@@ -17,7 +17,7 @@ public with sharing class eventFormController {
         return fields;
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Event getEventRecord(Id eventId){
 
         return [SELECT Id, Subject, StartDateTime, EndDateTime,

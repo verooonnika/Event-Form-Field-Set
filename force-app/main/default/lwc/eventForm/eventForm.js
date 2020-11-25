@@ -5,9 +5,9 @@ import createEventRecord from '@salesforce/apex/eventFormController.createEventR
 
 export default class EventForm extends LightningElement {
 
-    @track fieldsData=[];
     @api recordId;
     @track eventRecord;
+    @track fieldsData=[];
 
     @wire(getFields) fields ({data, error}) {
         if(data) {
@@ -20,14 +20,18 @@ export default class EventForm extends LightningElement {
         }
     } 
 
-    @wire(getEventRecord, {eventId: '$recordId'}) record ({data, error}) {
-        if (data) {
-            this.eventRecord = {...data};
-    }
-}
-
     connectedCallback(){
-        //console.debug('15');
+        if(this.recordId){
+            getEventRecord({eventId: this.recordId})
+            .then(result =>{
+                this.eventRecord = result;
+            })
+            .catch(error =>{
+                console.debug(error);
+            })
+        } else{
+            this.eventRecord = {SObjectType: 'Event'};
+        }
     }
 
     get fieldsInfo(){  
@@ -45,7 +49,6 @@ export default class EventForm extends LightningElement {
     changeFieldValue(event){
         var field = this.fieldsData.find(element => element.label == event.target.label);
         this.eventRecord[field.apiName] = event.target.value;
-        console.debug(this.eventRecord);
     }
 
     handleSave(){
