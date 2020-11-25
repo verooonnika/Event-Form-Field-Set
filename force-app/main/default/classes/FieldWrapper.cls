@@ -3,11 +3,13 @@ public with sharing class FieldWrapper {
     @AuraEnabled public String apiName;
     @AuraEnabled public String label;
     @AuraEnabled public String lwcType;
+    @AuraEnabled public Object value;
+
 
     public FieldWrapper(String apiName, String label, String type) {
         this.apiName = apiName;
         this.label = label;
-        
+
         if(type == 'STRING'){
             this.lwcType = 'text';
         }
