@@ -4,10 +4,12 @@
             <div class="slds-p-around_large">
                 <template for:each={fieldsInfo} for:item="field">
                     <div key={field.apiName} class="slds-p-around_small">
-                        <lightning-input type={field.type} label={field.label} value={field.value}></lightning-input>
+                        <lightning-input type={field.type} label={field.label} value={field.value} onchange={changeFieldValue}></lightning-input>
                     </div>
                 </template>
             </div>
+            <lightning-button label="Save" onclick={handleSave}>
+        </lightning-button>
         </lightning-card>
     </div>
 </template>

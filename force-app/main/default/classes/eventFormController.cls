@@ -20,10 +20,15 @@ public with sharing class eventFormController {
     @AuraEnabled(cacheable=true)
     public static Event getEventRecord(Id eventId){
 
-        return [SELECT Id, StartDateTime, EndDateTime,
+        return [SELECT Id, Subject, StartDateTime, EndDateTime,
          CheckBox_Field__c, Currency_Field__c, Email_Field__c,
         Phone_Field__c, PickList_Field__c, Text_Field__c 
          FROM Event 
          WHERE Id =: eventId LIMIT 1];
+    }
+
+    @AuraEnabled
+    public static void createEventRecord(Event eventObject){
+        upsert eventObject;
     }
 }

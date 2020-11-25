@@ -1,6 +1,7 @@
 import {LightningElement, wire, track, api} from 'lwc';
 import getFields from '@salesforce/apex/eventFormController.getFields';
 import getEventRecord from '@salesforce/apex/eventFormController.getEventRecord';
+import createEventRecord from '@salesforce/apex/eventFormController.createEventRecord';
 
 export default class EventForm extends LightningElement {
 
@@ -22,7 +23,6 @@ export default class EventForm extends LightningElement {
     @wire(getEventRecord, {eventId: '$recordId'}) record ({data, error}) {
         if (data) {
             this.eventRecord = {...data};
-
     }
 }
 
@@ -42,4 +42,20 @@ export default class EventForm extends LightningElement {
         return this.fieldsData;
     }
 
+    changeFieldValue(event){
+        var field = this.fieldsData.find(element => element.label == event.target.label);
+        this.eventRecord[field.apiName] = event.target.value;
+        console.debug(this.eventRecord);
+    }
+
+    handleSave(){
+        let updatedEvent = JSON.parse(JSON.stringify(this.eventRecord));
+        createEventRecord({eventObject: updatedEvent})
+        .then(result =>{
+            console.debug('success', result);
+        })
+        .catch(error =>{
+            console.debug(error);
+        })
+    }
 }

@@ -4,3 +4,6 @@ declare module "@salesforce/apex/eventFormController.getFields" {
 declare module "@salesforce/apex/eventFormController.getEventRecord" {
   export default function getEventRecord(param: {eventId: any}): Promise<any>;
 }
+declare module "@salesforce/apex/eventFormController.createEventRecord" {
+  export default function createEventRecord(param: {eventObject: any}): Promise<any>;
+}
