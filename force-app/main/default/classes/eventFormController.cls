@@ -28,7 +28,20 @@ public with sharing class eventFormController {
     }
 
     @AuraEnabled
-    public static void createEventRecord(Event eventObject){
+    public static Id createEventRecord(Event eventObject){
         upsert eventObject;
+        return eventObject.Id;
+    }
+
+    @AuraEnabled(cacheable = true)
+    public static Map<String, String> getEventSubjectPicklist(){
+        Map<String, String> picklistMap = new Map<String, String>();
+        Schema.DescribeFieldResult fieldResult = Event.Subject.getDescribe();
+        List<Schema.PicklistEntry> pickList = fieldResult.getPicklistValues();
+        for(Schema.PicklistEntry ple: pickList){
+            picklistMap.put(ple.getLabel(), ple.getValue());
+        }
+
+        return picklistMap;
     }
 }

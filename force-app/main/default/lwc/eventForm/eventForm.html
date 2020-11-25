@@ -4,12 +4,20 @@
             <div class="slds-p-around_large">
                 <template for:each={fieldsInfo} for:item="field">
                     <div key={field.apiName} class="slds-p-around_small">
-                        <lightning-input type={field.type} label={field.label} value={field.value} onchange={changeFieldValue}></lightning-input>
+                        <div if:true={field.isCombobox}>
+                            <lightning-combobox label={field.label} value={field.value} options={subjectOptions}
+                                onchange={changeFieldValue}>
+                            </lightning-combobox>
+                        </div>
+                        <div if:false={field.isCombobox}>
+                            <lightning-input type={field.type} label={field.label} value={field.value}
+                                onchange={changeFieldValue}></lightning-input>
+                        </div>
                     </div>
                 </template>
             </div>
-            <lightning-button label="Save" onclick={handleSave}>
-        </lightning-button>
+            <lightning-button label="Save" onclick={handleSave} class="slds-align_absolute-center">
+            </lightning-button>
         </lightning-card>
     </div>
 </template>

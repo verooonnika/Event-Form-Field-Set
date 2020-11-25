@@ -7,3 +7,6 @@ declare module "@salesforce/apex/eventFormController.getEventRecord" {
 declare module "@salesforce/apex/eventFormController.createEventRecord" {
   export default function createEventRecord(param: {eventObject: any}): Promise<any>;
 }
+declare module "@salesforce/apex/eventFormController.getEventSubjectPicklist" {
+  export default function getEventSubjectPicklist(): Promise<any>;
+}

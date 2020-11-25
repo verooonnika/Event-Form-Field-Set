@@ -5,7 +5,6 @@ public with sharing class FieldWrapper {
     @AuraEnabled public String lwcType;
     @AuraEnabled public Object value;
 
-
     public FieldWrapper(String apiName, String label, String type) {
         this.apiName = apiName;
         this.label = label;
