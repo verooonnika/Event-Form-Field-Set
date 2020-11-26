@@ -7,11 +7,7 @@ public with sharing class eventFormController {
         for(Schema.FieldSetMember field: fieldSetMembers){
             Schema.DescribeFieldResult fieldDescribe = field.getSObjectField().getDescribe();
             
-            String fieldName = fieldDescribe.getName();
-            String fieldLabel = fieldDescribe.getLabel();
-            String fieldType = fieldDescribe.getType().name();
-            Boolean isRequired = field.getDBRequired();
-            FieldWrapper fieldWrap = new FieldWrapper(fieldName, fieldLabel, fieldType, isRequired);
+            FieldWrapper fieldWrap = new FieldWrapper(fieldDescribe);
             fields.add(fieldWrap);            
         }
         
@@ -34,17 +30,5 @@ public with sharing class eventFormController {
     public static Id createEventRecord(Event eventObject){
         upsert eventObject;
         return eventObject.Id;
-    }
-
-    @AuraEnabled(cacheable = true)
-    public static Map<String, String> getEventSubjectPicklist(){
-        Map<String, String> picklistMap = new Map<String, String>();
-        Schema.DescribeFieldResult fieldResult = Event.Subject.getDescribe();
-        List<Schema.PicklistEntry> pickList = fieldResult.getPicklistValues();
-        for(Schema.PicklistEntry ple: pickList){
-            picklistMap.put(ple.getLabel(), ple.getValue());
-        }
-
-        return picklistMap;
     }
 }

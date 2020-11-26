@@ -5,7 +5,7 @@
                 <template for:each={fieldsInfo} for:item="field">
                     <div key={field.apiName} class="slds-p-around_small">
                         <div if:true={field.isCombobox}>
-                            <lightning-combobox label={field.label} value={field.value} options={subjectOptions}
+                            <lightning-combobox label={field.label} value={field.value} options={field.options}
                                 onchange={changeFieldValue} required={field.isRequired}>
                             </lightning-combobox>
                         </div>

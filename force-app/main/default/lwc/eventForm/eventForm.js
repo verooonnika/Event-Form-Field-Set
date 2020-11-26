@@ -2,7 +2,6 @@ import {LightningElement, wire, track, api} from 'lwc';
 import getFields from '@salesforce/apex/eventFormController.getFields';
 import getEventRecord from '@salesforce/apex/eventFormController.getEventRecord';
 import createEventRecord from '@salesforce/apex/eventFormController.createEventRecord';
-import getEventSubjectPicklist from '@salesforce/apex/eventFormController.getEventSubjectPicklist';
 import {NavigationMixin} from 'lightning/navigation';
 
 export default class EventForm extends NavigationMixin(LightningElement){
@@ -11,28 +10,19 @@ export default class EventForm extends NavigationMixin(LightningElement){
     @track eventRecord;
     @track fieldsData=[];
 
-    @track subjectOptions=[];
-
     @wire(getFields) fields ({data, error}) {
         if(data) {
             data.forEach(field => {
                 if(field.lwcType == 'COMBOBOX'){
-                    this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: true, isRequired: field.isRequired});
+                    var pickListOptions = [];
+                    for (var key in field.picklistValues){
+                        pickListOptions.push({label: key, value: field.picklistValues[key]});
+                    }
+                    this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: true, isRequired: field.isRequired, options: pickListOptions});
                 }else{
                     this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: false, isRequired: field.isRequired});
                 }
             });
-        }
-        else if(error) {
-            console.log(error);
-        }
-    } 
-
-    @wire(getEventSubjectPicklist) subjectPicklist({data, error}) {
-        if(data) {
-            for(var key in data){
-                this.subjectOptions.push({label:key, value:data[key]});
-            }  
         }
         else if(error) {
             console.log(error);
