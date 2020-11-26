@@ -20,12 +20,14 @@ public with sharing class eventFormController {
 
     @AuraEnabled
     public static Event getEventRecord(Id eventId){
+        List<Schema.FieldSetMember> fieldSetMembers = SObjectType.Event.FieldSets.Event_Field_Set.getFields();
 
-        return [SELECT Id, Subject, StartDateTime, EndDateTime,
-         CheckBox_Field__c, Currency_Field__c, Email_Field__c,
-        Phone_Field__c, PickList_Field__c, Text_Field__c 
-         FROM Event 
-         WHERE Id =: eventId LIMIT 1];
+        String query = 'SELECT ';
+        for(Schema.FieldSetMember f : fieldSetMembers) {
+            query += f.getFieldPath() + ', ';
+        }
+        query += 'Id FROM Event WHERE Id =: eventId LIMIT 1';
+        return Database.query(query);
     }
 
     @AuraEnabled
