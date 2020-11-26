@@ -6,12 +6,13 @@
                     <div key={field.apiName} class="slds-p-around_small">
                         <div if:true={field.isCombobox}>
                             <lightning-combobox label={field.label} value={field.value} options={subjectOptions}
-                                onchange={changeFieldValue}>
+                                onchange={changeFieldValue} required={field.isRequired}>
                             </lightning-combobox>
                         </div>
                         <div if:false={field.isCombobox}>
                             <lightning-input type={field.type} label={field.label} value={field.value}
-                                onchange={changeFieldValue}></lightning-input>
+                                onchange={changeFieldValue} required={field.isRequired} checked={field.value}>
+                            </lightning-input>
                         </div>
                     </div>
                 </template>

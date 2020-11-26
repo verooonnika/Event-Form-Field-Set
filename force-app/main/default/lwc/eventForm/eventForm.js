@@ -17,11 +17,10 @@ export default class EventForm extends NavigationMixin(LightningElement){
         if(data) {
             data.forEach(field => {
                 if(field.lwcType == 'COMBOBOX'){
-                    this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: true});
+                    this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: true, isRequired: field.isRequired});
                 }else{
-                    this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: false});
+                    this.fieldsData.push({label: field.label, apiName: field.apiName, type: field.lwcType, isCombobox: false, isRequired: field.isRequired});
                 }
-                
             });
         }
         else if(error) {
@@ -59,7 +58,7 @@ export default class EventForm extends NavigationMixin(LightningElement){
             this.fieldsData.forEach(field => {
                 if(this.eventRecord[field.apiName] != undefined){
                     field.value = this.eventRecord[field.apiName];
-                }
+            }
         });
     } 
 
@@ -68,21 +67,27 @@ export default class EventForm extends NavigationMixin(LightningElement){
 
     changeFieldValue(event){
         var field = this.fieldsData.find(element => element.label == event.target.label);
-        this.eventRecord[field.apiName] = event.target.value;
+        if(field.type == 'checkbox'){
+            this.eventRecord[field.apiName] = event.target.checked;
+        } else{
+            this.eventRecord[field.apiName] = event.target.value;
+        }
     }
 
     handleSave(){
-        let updatedEvent = JSON.parse(JSON.stringify(this.eventRecord));
-        createEventRecord({eventObject: updatedEvent})
-        .then(result =>{
-            if(!this.recordId){
-                this.recordId = result;
-            }
-            this.navigateToEventPage();
-        })
-        .catch(error =>{
-            console.debug(error);
-        })
+        if(this.validateFields()){
+            let updatedEvent = JSON.parse(JSON.stringify(this.eventRecord));
+            createEventRecord({eventObject: updatedEvent})
+            .then(result =>{
+                if(!this.recordId){
+                    this.recordId = result;
+                }
+                this.navigateToEventPage();
+            })
+            .catch(error =>{
+                console.debug(error);
+            })
+        }
     }
 
     navigateToEventPage() {
@@ -95,4 +100,14 @@ export default class EventForm extends NavigationMixin(LightningElement){
             }
         });
  }
+
+    validateFields() {
+        const allValid = [...this.template.querySelectorAll('lightning-input')]
+        .reduce((validSoFar, inputCmp) => {
+                    inputCmp.reportValidity();
+                    return validSoFar && inputCmp.checkValidity();
+        }, true);
+
+        return allValid;
+    }
 }

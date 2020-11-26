@@ -4,11 +4,16 @@ public with sharing class FieldWrapper {
     @AuraEnabled public String label;
     @AuraEnabled public String lwcType;
     @AuraEnabled public Object value;
+    @AuraEnabled public Boolean isRequired;
 
-    public FieldWrapper(String apiName, String label, String type) {
+    public FieldWrapper(String apiName, String label, String type, Boolean isRequired) {
         this.apiName = apiName;
         this.label = label;
 
+        if(apiName == 'StartDateTime' || apiName == 'EndDateTime'){
+            this.isRequired = true;
+        }
+    
         if(type == 'STRING'){
             this.lwcType = 'text';
         }

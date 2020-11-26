@@ -10,7 +10,8 @@ public with sharing class eventFormController {
             String fieldName = fieldDescribe.getName();
             String fieldLabel = fieldDescribe.getLabel();
             String fieldType = fieldDescribe.getType().name();
-            FieldWrapper fieldWrap = new FieldWrapper(fieldName, fieldLabel, fieldType);
+            Boolean isRequired = field.getDBRequired();
+            FieldWrapper fieldWrap = new FieldWrapper(fieldName, fieldLabel, fieldType, isRequired);
             fields.add(fieldWrap);            
         }
         
